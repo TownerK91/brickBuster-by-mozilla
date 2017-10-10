@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>BrickBreaker</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Stalinist+One" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+
+<style>
+    .footer{
+        margin-bottom: 0px;
+    }
+</style>
+
+
+
+
+<body>
+<!--<canvas> elements are used to draw graphics or to be used as a graphic container-->
+	<canvas id="canvas1" width="600" height="600" style="position: absolute; left: 50%; margin-left: -250px; margin-top: 120px; background-color: black;"></canvas>
+    <div class = "footer">
+        © 2005-2017 Mozilla and individual contributors.
+    </div>
+
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+<script type="text/javascript">
+
+
+
+
+
+
+
+
+
+
+
+
+//***********************************************************************************//
+//********************************* STEP 1 *****************************************//
+//***********************************************************************************//
+
+//grabbing ID canvas to be assigned to the (constant/never changing)variable==>canvas 
+const canvas = document.getElementById('canvas1');
+
+//allows us to inprint 2d rectangles and shapes, ¿¿ sortof grabbing the canvas similar to document.getElementById ??
+const ctx = canvas.getContext('2d');
+
+//***********************************************************************************//
+//********************************* STEP 1 *****************************************//
+//***********************************************************************************//
+
+
+
+//***********************************************************************************//
+//********************************* STEP 2 *****************************************//
+//***********************************************************************************//
+//defines where the circle is drawn
+var x=canvas.width/2;
+var y = canvas.height-30;
+var drawx = 2;
+var drawy = -2;
+//***********************************************************************************//
+//********************************* STEP 2 *****************************************//
+//***********************************************************************************//
+
+
+//***********************************************************************************//
+//********************************* STEP 4 *****************************************//
+//***********************************************************************************//
+var boardHeight = 10;
+var boardWidth = 75;
+var board1 = (canvas.width - boardWidth)/2;
+//***********************************************************************************//
+//********************************* STEP 4 *****************************************//
+//***********************************************************************************//
+
+
+
+//***********************************************************************************//
+//********************************* STEP 2 *****************************************//
+//***********************************************************************************//
+
+
+//***********************************************************************************//
+//********************************* STEP 3 *****************************************//
+//***********************************************************************************//
+//this variable is referenced to hold the radius of the circle
+var ballRadius = 12;
+//***********************************************************************************//
+//********************************* STEP 3 *****************************************//
+//***********************************************************************************//
+
+
+
+
+
+//***********************************************************************************//
+//********************************* STEP 2 *****************************************//
+//***********************************************************************************//
+function drawBall(){ //function for drawing the ball 
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "red";
+    ctx.fill();
+    ctx.closePath();
+}
+//***********************************************************************************//
+//********************************* STEP 4 *****************************************//
+//***********************************************************************************//
+function drawBoard(){
+    ctx.beginPath();
+    ctx.rect(board1, canvas.height - boardHeight, boardWidth, boardHeight);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+}
+//***********************************************************************************//
+//********************************* STEP 4 *****************************************//
+//***********************************************************************************//
+
+//ctx.clearRect is a built in function and we are clearing the entire canvas while, at the same time, the global variables above are beinng added to each other and creating the movement of the ball.
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBall();
+    drawBoard()
+    x += drawx;
+    y += drawy;
+
+//***********************************************************************************//
+//********************************* STEP 2 *****************************************//
+//***********************************************************************************//
+
+
+//***********************************************************************************//
+//********************************* STEP 3 *****************************************//
+//***********************************************************************************//
+//controls the way the ball bounces off the walls
+    //1ST IF STATEMENT**If the ball's y position is greater than the height of the Canvas (remember that we count the y values from the top left, so the top edge starts at 0 and the bottom edge is at 480 pixels, the Canvas' height), then bounce it off the bottom edge by reversing the y axis movement as before.
+    //If the y value of the ball position is lower than zero, change the direction of the movement on the y axis by setting it equal to itself, reversed. If the ball was moving upwards with a speed of 2 pixels per frame, now it will be moving "up" with a speed of -2 pixels, which actually equals to moving down at a speed of 2 pixels per frame.
+    if(x + drawx > canvas.width || x + drawy < ballRadius){
+    drawx = -drawx
+    }
+    //2ND IF STATEMENT**ALMOST IDENTICAL TO THE TOP
+    if(y + drawy > canvas.height || y+ drawy < ballRadius){
+    drawy = -drawy
+    }
+//***********************************************************************************//
+//********************************* STEP 3 *****************************************//
+//***********************************************************************************//
+}//END OF DRAW FUNCTION
+
+
+
+//every 10 milliseconds the ball will re-draw it's self and create the illsuionof movement. setInterval function is called and it's called on the paramers of the function, draw, and this function will repeat every 10 milliseconds creating the illusion of a moving objecT
+setInterval(draw, 10);
+
+
+
+
+
+/*
+ OTHER WAYS TO DRAW RECTANGLE, AS WELL AS SHAPES BELOW
+***************************************************************++++++
+
+
+<--basic-->
+context.fillRect(0,0, canvas.width, canvas.height);
+context.fillStyle = "#000";
+
+
+
+
+<--RECTANGLE-->
+ctx.beginPath();
+ctx.rect(20, 40, 50, 50);
+ctx.fillStyle = "#FF0000";
+ctx.fill();
+ctx.closePath();
+
+<--CIRCLE-->
+ctx.beginPath();
+ctx.arc(240, 160, 20, 0, Math.PI*2, false);
+ctx.fillStyle = "green";
+ctx.fill();
+ctx.closePath();
+
+
+<--OUTERSTROKES-->
+ctx.beginPath();
+ctx.rect(160, 10, 100, 40);
+ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
+ctx.stroke();
+ctx.closePath();
+
+**********************************************************************
+*/
+
+</script>
+</html>
